@@ -58,5 +58,19 @@ app.delete("/data", function(req, res) {
   data = data.filter((item) => item.detail!=req.query.detail)
   res.send(data);
 })
+app.put("/data", function(req, res) {
+  console.log("update is coming");
+  console.log(req.body, "put req");
+  todolistModel.updateOne({detail: req.body.detail}, {$set: {iscompleted: req.body.iscompleted}}, function(err) {
+    if (err) console.log(err);
+  })
+  data = data.map(function(item) {
+    if (item.detail === req.body.detail)
+      item.iscompleted=req.body.iscompleted
+    return item;
+  })
+  console.log(data)
+  res.send(data);
+})
 app.listen("3000");
 console.log("listen on port 3000");
